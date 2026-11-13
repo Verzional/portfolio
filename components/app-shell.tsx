@@ -14,6 +14,7 @@ const homeHoverBgMap: Record<string, string> = {
   "/experience": "/images/backgrounds/bg-saejima.webp",
   "/skills": "/images/backgrounds/bg-majima.webp",
   "/socials": "/images/backgrounds/bg-nishiki.webp",
+  "/Valentino-Manuel-Gunawan-Resume.pdf": "/images/backgrounds/bg-daigo.webp",
 };
 
 // Non-Home Page Backgrounds

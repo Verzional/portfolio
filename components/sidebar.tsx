@@ -24,17 +24,26 @@ export function Sidebar({ previousPath }: { previousPath?: string | null }) {
     itemCount: menuItems.length,
     initialIndex: getInitialIndex(),
     onSelect: (index: number) => {
-      const route = menuItems[index].href;
-      router.push(route);
+      const item = menuItems[index];
+      if (!item) return;
+      if (item.external) {
+        window.open(item.href, "_blank", "noopener,noreferrer");
+      } else {
+        router.push(item.href);
+      }
     },
   });
 
   // Prefetch Active Menu Item Route and Dispatch Custom Event for Preview
   useEffect(() => {
-    const route = menuItems[activeIndex]?.href;
-    if (route) {
-      router.prefetch(route);
-      window.dispatchEvent(new CustomEvent("preview-route", { detail: route }));
+    const item = menuItems[activeIndex];
+    if (item) {
+      if (!item.external) {
+        router.prefetch(item.href);
+      }
+      window.dispatchEvent(
+        new CustomEvent("preview-route", { detail: item.href }),
+      );
     }
   }, [activeIndex, router]);
 
@@ -76,30 +85,52 @@ export function Sidebar({ previousPath }: { previousPath?: string | null }) {
         {/* Navigation Items */}
         <nav
           ref={navRef}
-          className="flex min-h-0 flex-1 scrollbar-none flex-col gap-2 overflow-x-hidden overflow-y-auto font-edo-sz text-foreground md:gap-8"
+          className="flex min-h-0 flex-1 scrollbar-none flex-col gap-2 overflow-x-hidden overflow-y-auto font-edo-sz text-foreground md:gap-6"
         >
           {menuItems.map((item, index) => {
             const isActive = index === activeIndex;
+            const itemClassName = `block w-[95%] shrink-0 py-2 pl-8 text-left text-3xl transition-colors md:pt-2 md:pb-4 md:pl-16 md:text-6xl ${
+              isActive ? "relative bg-menu-select" : ""
+            }`;
+            const handlePointerMove = (
+              e: React.PointerEvent<HTMLAnchorElement>,
+            ) => {
+              if (e.pointerType === "mouse" && activeIndex !== index) {
+                setActiveIndex(index);
+              }
+            };
+            const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+              if (activeIndex !== index) {
+                e.preventDefault();
+                setActiveIndex(index);
+              }
+            };
+
+            if (item.external) {
+              return (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener,noreferrer"
+                  data-active={isActive}
+                  onPointerMove={handlePointerMove}
+                  onClick={handleClick}
+                  className={itemClassName}
+                >
+                  {item.label}
+                </a>
+              );
+            }
 
             return (
               <Link
                 key={item.id}
                 href={item.href}
                 data-active={isActive}
-                onPointerMove={(e) => {
-                  if (e.pointerType === "mouse" && activeIndex !== index) {
-                    setActiveIndex(index);
-                  }
-                }}
-                onClick={(e) => {
-                  if (activeIndex !== index) {
-                    e.preventDefault();
-                    setActiveIndex(index);
-                  }
-                }}
-                className={`block w-[95%] shrink-0 py-2 pl-8 text-left text-3xl transition-colors md:pt-2 md:pb-4 md:pl-16 md:text-6xl ${
-                  isActive ? "relative bg-menu-select" : ""
-                }`}
+                onPointerMove={handlePointerMove}
+                onClick={handleClick}
+                className={itemClassName}
               >
                 {item.label}
               </Link>

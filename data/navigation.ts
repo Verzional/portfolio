@@ -1,4 +1,12 @@
-export const menuItems = [
+export interface MenuItem {
+  id: string;
+  label: string;
+  desc: string;
+  href: string;
+  external?: boolean;
+}
+
+export const menuItems: MenuItem[] = [
   {
     id: "projects",
     label: "Projects",
@@ -22,5 +30,12 @@ export const menuItems = [
     label: "Socials",
     desc: "Map of digital profiles and networking channels.",
     href: "/socials",
+  },
+  {
+    id: "resume",
+    label: "Resume",
+    desc: "Official PDF dossier of engineering experience and metrics.",
+    href: "/Valentino-Manuel-Gunawan-Resume.pdf",
+    external: true,
   },
 ];
