@@ -9,9 +9,6 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "verify": "pnpm typecheck && pnpm lint",
-    "validate": "pnpm verify",
-    "changelog": "tsx scripts/generate-changelog.ts",
-    "learn-pattern": "tsx scripts/record-learning.ts",
     "optimize-image": "tsx scripts/optimize-image.ts",
     "prepare": "husky"
   },
