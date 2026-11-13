@@ -15,7 +15,7 @@ For full build verification, run:
 ```bash
 pnpm build
 ```
-This executes `next build && next-image-export-optimizer` to guarantee static export safety and image pipeline compilation.
+This executes `next build` to guarantee production compilation and route generation.
 
 ## Autonomous Triage Procedure
 If `pnpm verify` fails:

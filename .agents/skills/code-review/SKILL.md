@@ -18,7 +18,7 @@ Use this skill to critically review code changes, identify hidden defects, and e
 - Is the component using `reactCompiler: true` cleanly without manual memoization bloat?
 - Are client components marked with `"use client";` placed as deep leaf nodes?
 - Are imports from `motion/react` (v12 style) and NOT `framer-motion`?
-- Are `<ExportedImage />` components provided with responsive `sizes` props on `fill` images?
+- Are `next/image` `<Image />` components provided with responsive `sizes` props on `fill` images?
 
 ### 3. Logic, Edge Cases & Null Safety
 - Are empty arrays, empty strings, and undefined fields guarded against?

@@ -2,18 +2,17 @@
 
 This rule governs frontend development within Verzional's Portfolio (Next.js 16 App Router, React 19, Tailwind CSS v4, Motion).
 
-## 1. App Router, Static Export & RSC Boundaries
-- **Static Export (`output: "export"`)**: The site is statically exported with `unoptimized: true` on Cloudflare Pages.
+## 1. App Router & RSC Boundaries
+- **Deployment (Vercel)**: Deployed on Vercel with Next.js 16 App Router.
   - Sub-routes export explicit `metadata` with a `title` to leverage layout templates.
   - Interactive client pages mark `"use client";` at the top.
 - **React 19 Compiler**: The project runs with `reactCompiler: true`. Do NOT write manual `React.memo`, `useMemo`, or `useCallback` unless strictly required by an ESLint dependency warning.
 - **React Hooks**: Do NOT use `useEffect` to sync state or props to `useRef` just to bypass dependency arrays. Pass dependencies properly.
 - **Portals (`<SidebarPortal>`)**: Subpages manage their own sidebar UI by portaling `<SubMenu>` via `<SidebarPortal>` into the `#sidebar-root`. It safely handles hydration and `AnimatePresence mode="wait"` DOM transitions.
 
-## 2. Next Image Export Optimizer & Sizing
-- Use `ExportedImage` from `next-image-export-optimizer` for optimized web asset serving.
-- **Sizes Prop Invariant**: On images using `fill={true}`, ALWAYS supply responsive `sizes` (e.g. `sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 50vw"`). Omitting `sizes` forces the browser to request the 4K variant (`3840.WEBP`), causing severe LCP degradation and GPU bandwidth spikes.
-- Do NOT add `quality` attributes to `<ExportedImage />` components, as they are ignored by static export.
+## 2. Next.js Image Optimization & Sizing
+- Use `Image` from `next/image` for all raster assets.
+- **Sizes Prop Invariant**: On images using `fill={true}`, ALWAYS supply responsive `sizes` (e.g. `sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 50vw"`). Omitting `sizes` forces the browser to request the largest variant, causing LCP degradation and unnecessary bandwidth usage.
 
 ## 3. Motion & Animation Physics
 - **Motion Library**: ALWAYS import `motion` from `"motion/react"` (v12 style), NEVER `"framer-motion"`.

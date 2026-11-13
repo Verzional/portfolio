@@ -9,14 +9,14 @@ Use this skill to audit frontend performance, image optimization, and bundle foo
 
 ## Audit Checklist:
 
-1. **Next Image Optimizer**:
+1. **Next.js Image Optimization**:
    - Check that all static images under `public/images/` are optimized into WebP format.
-   - Verify every `<ExportedImage fill>` has an explicit responsive `sizes` attribute.
-   - Run `pnpm build` to verify `next-image-export-optimizer` generates all responsive derivatives without errors.
+   - Verify every `<Image fill>` has an explicit responsive `sizes` attribute.
+   - Run `pnpm build` to verify production assets and static routes compile cleanly.
 
 2. **DOM & Layout Shifts**:
    - Verify that CSS `transition-[width]` is used instead of Framer Motion `layout` prop on responsive width containers.
    - Check that heavy backgrounds do not cause layout reflow on route mount.
 
-3. **Production Static Export**:
-   - Verify static export compiles cleanly: `pnpm build`.
+3. **Production Build**:
+   - Verify production build compiles cleanly: `pnpm build`.

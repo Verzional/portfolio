@@ -9,7 +9,7 @@
 
 | ID | Category | Title | Heuristic Summary | Date Added |
 | :--- | :--- | :--- | :--- | :--- |
-| **LP-001** | Performance | ExportedImage Fill Sizes Prop | `<ExportedImage fill>` must have responsive `sizes` prop to prevent downloading 4K `3840.WEBP` variants. | 2026-09-17 |
+| **LP-001** | Performance | Next Image Fill Sizes Prop | `<Image fill>` must have responsive `sizes` prop to prevent downloading oversized 4K variants. | 2026-09-17 |
 | **LP-002** | Animation | No Framer Motion Layout Prop for Width | Avoid Framer Motion `layout` prop on responsive width containers; use pure CSS `transition-[width]`. | 2026-09-10 |
 | **LP-003** | React 19 | React Compiler No Manual Memoization | With `reactCompiler: true`, avoid manual `useMemo`, `useCallback`, or `React.memo`. | 2026-09-11 |
 | **LP-004** | Portals | SidebarPortal requestAnimationFrame | SubMenu mounting into `#sidebar-root` requires `requestAnimationFrame` to avoid `AnimatePresence mode="wait"` delays. | 2026-09-12 |
@@ -19,17 +19,17 @@
 
 ## 🔍 Detailed Heuristic Profiles
 
-### LP-001: ExportedImage Fill Sizes Prop
-* **Context**: `next-image-export-optimizer` generates responsive derivatives (10px up to 3840px). When Next.js `<Image fill>` or `<ExportedImage fill>` lacks a `sizes` prop, the browser requests the largest image in `deviceSizes` (4K 3840px), causing extreme LCP slowdowns and GPU bandwidth spikes.
+### LP-001: Next Image Fill Sizes Prop
+* **Context**: Next.js `<Image fill>` generates responsive `srcset` derivatives. When `<Image fill>` lacks a `sizes` prop, the browser assumes `100vw` or requests the largest image in `deviceSizes`, causing slower LCP and unnecessary bandwidth spikes.
 * **Bad Pattern**:
   ```tsx
-  // ❌ Missing sizes prop causes browser to fetch 4K 3840px variant on all screens
-  <ExportedImage src={project.images[0]} fill={true} alt="Screenshot" />
+  // ❌ Missing sizes prop causes browser to fetch oversized variant on all screens
+  <Image src={project.images[0]} fill={true} alt="Screenshot" />
   ```
 * **Good Pattern**:
   ```tsx
   // ✅ Responsive sizes limits browser download to ~1080px or 1200px
-  <ExportedImage
+  <Image
     src={project.images[0]}
     fill={true}
     sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 50vw"
