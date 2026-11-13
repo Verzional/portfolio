@@ -1,130 +1,71 @@
-# 🤖 AI Agent Directives for [Verzional's Portfolio]
+# AGENTS.md — Verzional's Portfolio Guide
 
-## 🎯 Purpose
-
-This document provides instructions, context, and strict guardrails for any AI agent, coding assistant, or LLM interacting with this repository.
-
-**CRITICAL INSTRUCTION FOR AI:** You must read and adhere to all guidelines in this document before suggesting code, refactoring, or executing commands.
+Welcome to **Verzional's Portfolio**. This file provides a brief overview of the codebase and serves as the entry point to the repository's rules and specialized skills.
 
 ---
 
-## 🏗️ Project Context & Tech Stack
+## 1. Project Overview & Tech Stack
 
-- **Project Name:** [Verzional's Portfolio]
-- **Description:** [Portfolio website for Verzional, showcasing projects, skills, experience, and socials]
-- **Aesthetic:** [Yakuza & Persona inspired, video game aesthetic with neon colors]
-- **Primary Languages:** [TypeScript (TSX)]
-- **Frameworks/Libraries:** Next.js 16 (App Router), Tailwind CSS v4, Framer Motion, lucide-react
-- **Build/Package Tools:** pnpm
+A Yakuza & Persona 5 inspired interactive developer portfolio showcasing projects, career experience, technical skills, and socials.
 
----
-
-## 🛑 Core Directives & Rules of Engagement
-
-### 1. Code Generation Constraints
-
-- **No Unauthorized Autonomy:** NEVER proactively write, modify, or refactor code without explicit user instruction. If the user asks you to "inspect", "review", or "analyze", do exactly that and wait for the next command. Do not assume the next logical step.
-- **Do no harm:** Never blindly delete code without understanding its dependencies.
-- **No placeholder code:** Do not output `// ... existing code ...` or `TODO: implement` unless explicitly asked to provide a high-level skeleton. Provide complete, functional snippets.
-- **Keep it DRY:** Before writing new utility functions, search the existing `lib` or `hooks` directories to see if an equivalent already exists.
-- **Implement best practices:** Follow the latest best practices for React, TypeScript, and Next.js.
-  - **React 19 Compiler:** The project uses `reactCompiler: true`. Do NOT write manual `React.memo`, `useMemo`, or `useCallback` unless strictly required to satisfy an ESLint dependency warning.
-  - **React Hooks:** Do NOT use `useEffect` to sync state or props to `useRef` just to bypass dependency arrays. Pass dependencies properly.
-  - **SEO Metadata:** Always explicitly export `metadata` with a `title` on Server Component `page.tsx` sub-routes to leverage the layout's `title.template`.
-  - **Next/Image:** The project uses Static Export (`output: "export"`) with `unoptimized: true`. Do NOT add `sizes` or `quality` attributes to `<Image />` components, as they are ignored. Rely on Cloudflare Pages for edge optimization.
-  - **Security:** Always append `"noopener,noreferrer"` when using `window.open(..., "_blank")`.
-
-### 2. Architecture & File Structure
-
-Ensure all generated files are placed in the correct directories according to this architecture:
-
-- `app`: Page routes and application entry points. Subpages manage their own sidebar UI by portaling `<SubMenu>` via `<SidebarPortal>` into the `#sidebar-root`.
-- `components`: Reusable React components used by different parts of the application (e.g., `Sidebar`, `SubMenu`, `ControlLegend`).
-- `data`: Static data files (e.g., JSON, TypeScript constants) that feed into components.
-- `hooks`: Custom React hooks (e.g., `use-menu` for WASD navigation).
-- `lib`: Utility functions and shared logic.
-
-### 3. Formatting & Style Guide
-
-- **Naming Conventions:**
-  - Variables/Functions: `camelCase`
-  - Classes/Types/Interfaces: `PascalCase`
-  - Files: `kebab-case`
-- **Icons:** Use `lucide-react` for all icons.
-- **Linting & Purity:** Code must strictly adhere to the project's `.eslint.config.mjs` configuration. Always run `pnpm lint && pnpm tsc --noEmit` to verify build safety before concluding tasks. **NEVER use `// eslint-disable` comments.** You must natively satisfy the linter. Watch out for Next.js strict mode rules. NEVER use impure functions like `Math.random()` inside the render body of a component.
-- **Comments:** Inline comments dividing logic blocks must use strict Title Case headers without punctuation or excessive description (e.g., `// Track Active Skill Node`, `// Render Inner Parchment`). Avoid conversational or lowercase filler descriptions. Explain _why_ a complex block of code exists, not _what_ the syntax does.
-- **Styling (CSS Variables & Tailwind):**
-  - All coloring must use the variables defined in `app/globals.css`. Avoid hardcoding colors.
-  - **Strict Native Tailwind:** Prioritize native Tailwind classes (e.g., `h-13`, `text-sm`, `tracking-widest`) over arbitrary bracket values (e.g., `h-[52px]`, `text-[14px]`, `tracking-[0.1em]`). Only use arbitrary values for exact hex colors or ultra-specific percentages that don't exist in the framework.
-
-### 4. Animation & Portals
-
-- **Motion Library:** You must import `motion` from `"motion/react"` (v12 style), not `"framer-motion"`.
-- **Layout Shifts:** Avoid using Framer Motion's `layout` prop for responsive width changes; it injects pixel boundaries that override and break Tailwind responsive classes. Use pure CSS `transition-[width]` classes instead.
-- **React Portals:** When injecting unique submenus into the sidebar, always use the `<SidebarPortal>` component. It safely handles hydration and `AnimatePresence mode="wait"` DOM delays using `requestAnimationFrame`.
-- **Video Game UI Transitions:** Avoid generic, flat `easeOut` crossfades. Use punchy, weighted transitions (e.g. `ease: [0.33, 1, 0.68, 1]`) combined with subtle scale shifts (e.g., entering at `scale: 1.03`, exiting at `scale: 0.98`) to mimic the heavy, responsive feel of menus in Persona 5 and Yakuza.
-
-### 5. Responsive Design
-
-- **Mobile Background Anchoring:** When rendering full-screen backgrounds (especially landscape illustrations) on mobile devices (`object-cover`), DO NOT use generic anchors like `object-right` or `object-center` if the subject matter is off-center. Always use Tailwind arbitrary percentage values (e.g., `object-[75%_center] md:object-center`) so the exact framing of the character can be fine-tuned per device.
+- **Framework:** Next.js 16 (App Router, `reactCompiler: true`)
+- **UI & Motion:** React 19, Tailwind CSS v4, Motion (`motion/react`), `lucide-react`
+- **Tooling:** TypeScript, ESLint, Prettier, Husky, Commitlint, `pnpm`
 
 ---
 
-### 6. Git & Commits
+## 2. Directory Architecture
 
-- **Conventional Commits:** Commit messages must strictly follow the Conventional Commits specification.
-- **Git Execution:** Only run `git add` and `git commit` when explicitly instructed or given permission by the user. When instructed to commit, always separate changes into distinct, atomic commits following the Conventional Commits specification—never make a single monolithic commit. NEVER execute `git push` unless explicitly instructed.
-- **Commit Types:** 
-  - Use `feat` for new functionality, layout additions, and major responsive CSS changes.
-  - Use `fix` for resolving layout bugs or broken responsiveness.
-  - **CRITICAL:** The `style` commit type is *strictly* reserved for code formatting (e.g., whitespace, missing semicolons, indentation) that does not affect the compiled output. Do **not** use `style` for CSS, UI, or structural visual changes.
-
----
-
-## 🛠️ Task Execution Protocol
-
-When asked to implement a feature or fix a bug, follow these steps sequentially:
-
-1. **Analyze Context:** Review relevant files, imports, and state management related to the request.
-2. **Plan:** Briefly outline your proposed changes in text before writing code. (Wait for user approval if the change spans more than 3 files).
-3. **Implement:** Write the code adhering to the **Core Directives**.
-4. **Test:** If testing is enabled, write or update the corresponding unit tests for your newly generated code.
-5. **Verify:** Double-check that your code doesn't introduce type errors or break the current build.
-
----
-
----
-
-## 🏛️ Modular Rules & Superpower Skills
-
-Detailed domain invariants and runbooks are partitioned under `.agents/`:
-- **Rules (`.agents/rules/`)**:
-  - `00-general-engineering.md`: Safety, conventional commits, strict typing, pure core.
-  - `01-verification-loop.md`: Autonomous verification gatekeeper protocol (`pnpm verify`).
-  - `02-web-architecture.md`: Next.js 16 App Router, React 19, Motion, and Static Export standards.
-  - `03-multi-agent-orchestration.md`: Subagent delegation (researcher, critic, refactorer).
-  - `04-ui-ux-design-standards.md`: Spacing constitution, dark mode contrast, video game HUD aesthetics.
-  - `05-learned-patterns.md`: Dynamic empirical learning ledger for repo-specific post-mortems.
-- **Skills (`.agents/skills/`)**:
-  - `code-review`: Adversarial diff review runbook.
-  - `generate-changelog`: Keep a Changelog generator (`pnpm changelog`).
-  - `perf-audit`: Lighthouse, bundle size, and image optimization audit.
-  - `security-audit`: Dependency and link hardening audit.
-  - `ui-audit`: WCAG contrast and responsive layout sanity audit.
-  - `verify-suite`: Autonomous static typecheck, linting, and build verification.
-  - `scaffold-module`: Contract-first module and component scaffolding.
+```
+Portfolio/
+├── .agents/
+│   ├── rules/
+│   │   ├── 00-general-engineering.md    # Safety, VCS discipline, strict typing, pure core
+│   │   ├── 01-verification-loop.md      # Autonomous verification protocol (pnpm verify)
+│   │   ├── 02-web-architecture.md       # Next.js 16, React 19 compiler, Motion, portals
+│   │   ├── 03-ui-ux-design-standards.md # Spacing, WCAG contrast, game HUD & mobile framing
+│   │   └── 04-learned-patterns.md       # Empirical patterns (LP-001 through LP-005)
+│   └── skills/
+│       ├── code-review/SKILL.md         # Adversarial diff & PR checklist
+│       └── perf-audit/SKILL.md          # Bundle, image sizing, LCP & animation audit
+├── app/                                 # App Router pages & route-local _components/
+├── components/                          # Shared shell, Sidebar, SubMenu, SidebarPortal
+├── data/                                # Static TS datasets (projects, experience, skills, socials, navigation)
+├── hooks/                               # Custom hooks (use-menu, use-categories, use-idle-preload)
+├── lib/                                 # Shared utilities
+├── public/                              # Static assets (fonts, images, canonical resume PDF)
+└── scripts/
+    └── optimize-image.ts                # WebP asset conversion utility (pnpm optimize-image)
+```
 
 ---
 
-## 📝 Common Commands
+## 3. Engineering Operating Standards
 
-- **To run locally:** `pnpm dev`
-- **To build & export images:** `pnpm build`
-- **To verify (typecheck + lint):** `pnpm verify`
-- **To generate changelog:** `pnpm changelog [version]`
-- **To record learned pattern:** `pnpm learn-pattern --title "<title>" --heuristic "<context>"`
-- **To lint:** `pnpm lint`
+- **Verification:** Run `pnpm verify` (`tsc --noEmit && eslint .`) after behavioral or type changes, and `pnpm build` when validating production compilation.
+- **No `// eslint-disable`:** Code must natively satisfy ESLint.
+- **React 19 Compiler:** Do not write manual `React.memo`, `useMemo`, or `useCallback` unless required by an ESLint warning.
+- **Portals & Motion:** Import `motion` from `"motion/react"`, avoid Motion's `layout` prop on responsive widths, and portal subpage sidebars via `<SidebarPortal>`.
+- **External Links:** Always include `"noopener,noreferrer"` on `window.open(..., "_blank")` and `target="_blank"` links.
 
 ---
 
-**End of Directives.** _(If you understand these instructions, begin your next response by acknowledging the tech stack and asking how you can help.)_
+## 4. Conventional Commit Standards
+
+| Type | Description |
+| :--- | :--- |
+| `feat` | New functionality, layout additions, or major responsive CSS changes |
+| `fix` | Bug fixes, layout fixes, or asset resolution fixes |
+| `refactor` | Code restructuring without functional change |
+| `style` | Code formatting only (whitespace, semicolons) — never CSS/UI changes |
+| `perf` | Performance optimizations |
+| `docs` | Documentation changes |
+| `chore` | Build scripts, tooling, or configuration |
+
+---
+
+## 5. Domain Rules & Specialized Skills
+
+Consult `.agents/rules/` for domain invariants and `.agents/skills/` for focused audits:
+- **Code Review** (`.agents/skills/code-review/SKILL.md`): Adversarial diff review before presenting changes.
+- **Performance Audit** (`.agents/skills/perf-audit/SKILL.md`): Image sizing, bundle weight, LCP, and animation frame rate checks.
