@@ -14,7 +14,7 @@ const homeHoverBgMap: Record<string, string> = {
   "/experience": "/images/backgrounds/bg-saejima.webp",
   "/skills": "/images/backgrounds/bg-majima.webp",
   "/socials": "/images/backgrounds/bg-nishiki.webp",
-  "/Valentino-Manuel-Gunawan-Resume.pdf": "/images/backgrounds/bg-daigo.webp",
+  "/Valentino-Manuel-Gunawan-Resume.pdf": "/images/backgrounds/bg-tendo.webp",
 };
 
 // Non-Home Page Backgrounds
@@ -34,6 +34,7 @@ const bgOpacityMap: Record<string, string> = {
   "/images/backgrounds/bg-ichiban.webp": "opacity-7 md:opacity-4",
   "/images/backgrounds/bg-ryuji.webp": "opacity-7 md:opacity-4",
   "/images/backgrounds/bg-daigo.webp": "opacity-7 md:opacity-4",
+  "/images/backgrounds/bg-tendo.webp": "opacity-7 md:opacity-4",
   "/images/backgrounds/bg-p5r-1.webp": "opacity-8 md:opacity-5",
   "/images/backgrounds/bg-p5r-2.webp": "opacity-8 md:opacity-5",
 };
